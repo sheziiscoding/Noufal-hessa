@@ -7,6 +7,13 @@ const PORT = process.env.PORT || 3000;
 const DB_FILE = path.join(__dirname, 'rsvps.json');
 const WISHES_FILE = path.join(__dirname, 'wishes.json');
 
+// Google Sheets proxy configurations (set via process.env.GOOGLE_SCRIPT_URL)
+const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL || '';
+
+const isGoogleScriptActive = () => {
+  return GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_SCRIPT_URL';
+};
+
 // Middleware to parse JSON and URL-encoded form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -84,9 +91,32 @@ app.get('/admin', (req, res) => {
 // ==========================================
 
 // 1. GET ALL RSVPS
-app.get('/api/rsvp', (req, res) => {
-  const data = readData(DB_FILE);
-  const sortedData = [...data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+app.get('/api/rsvp', async (req, res) => {
+  let sortedData = [];
+
+  if (isGoogleScriptActive()) {
+    try {
+      const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=rsvp`);
+      const googleData = await response.json();
+      if (Array.isArray(googleData)) {
+        sortedData = googleData.map(item => ({
+          name: item.name,
+          count: item.count,
+          timestamp: item.timestamp
+        }));
+      }
+    } catch (err) {
+      console.error('Error fetching RSVPs from Google Sheets proxy, falling back to local file:', err);
+      const data = readData(DB_FILE);
+      sortedData = [...data];
+    }
+  } else {
+    const data = readData(DB_FILE);
+    sortedData = [...data];
+  }
+
+  // Sort descending (newest confirmations first)
+  sortedData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   
   const totalGroups = sortedData.length;
   const totalGuests = sortedData.reduce((acc, curr) => {
@@ -103,7 +133,7 @@ app.get('/api/rsvp', (req, res) => {
 });
 
 // 2. POST NEW RSVP
-app.post('/api/rsvp', (req, res) => {
+app.post('/api/rsvp', async (req, res) => {
   const { guestName, guestCount } = req.body;
 
   if (!guestName || typeof guestName !== 'string' || guestName.trim() === '') {
@@ -120,8 +150,28 @@ app.post('/api/rsvp', (req, res) => {
     });
   }
 
-  const database = readData(DB_FILE);
+  if (isGoogleScriptActive()) {
+    try {
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action: 'rsvp', name: guestName, count: guestCount })
+      });
+      const result = await response.json();
+      if (result.success) {
+        console.log(`[RSVP-Sheets] Registered: "${guestName}" (${guestCount} guests)`);
+        return res.json({
+          success: true,
+          message: `Thank you, ${guestName}! Your response has been received.`
+        });
+      }
+    } catch (err) {
+      console.error('Error posting RSVP to Google Sheets proxy, falling back to local file:', err);
+    }
+  }
 
+  // Fallback to local flat file database
+  const database = readData(DB_FILE);
   const newRsvp = {
     id: Date.now().toString(36) + Math.random().toString(36).substring(2, 7),
     name: guestName.trim(),
@@ -139,7 +189,7 @@ app.post('/api/rsvp', (req, res) => {
     });
   }
 
-  console.log(`[RSVP] Registered: "${newRsvp.name}" (${newRsvp.count} guests)`);
+  console.log(`[RSVP-Local] Registered: "${newRsvp.name}" (${newRsvp.count} guests)`);
 
   res.json({
     success: true,
@@ -152,10 +202,28 @@ app.post('/api/rsvp', (req, res) => {
 // ==========================================
 
 // 1. GET ALL WISHES
-app.get('/api/wishes', (req, res) => {
-  const data = readData(WISHES_FILE);
+app.get('/api/wishes', async (req, res) => {
+  let sortedWishes = [];
+
+  if (isGoogleScriptActive()) {
+    try {
+      const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=wish`);
+      const googleWishes = await response.json();
+      if (Array.isArray(googleWishes)) {
+        sortedWishes = googleWishes;
+      }
+    } catch (err) {
+      console.error('Error fetching wishes from Google Sheets proxy, falling back to local file:', err);
+      const data = readData(WISHES_FILE);
+      sortedWishes = [...data];
+    }
+  } else {
+    const data = readData(WISHES_FILE);
+    sortedWishes = [...data];
+  }
+
   // Sort descending (newest comments first)
-  const sortedWishes = [...data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  sortedWishes.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   
   res.json({
     success: true,
@@ -164,7 +232,7 @@ app.get('/api/wishes', (req, res) => {
 });
 
 // 2. POST NEW WISH
-app.post('/api/wishes', (req, res) => {
+app.post('/api/wishes', async (req, res) => {
   const { name, message } = req.body;
 
   if (!name || typeof name !== 'string' || name.trim() === '') {
@@ -181,8 +249,28 @@ app.post('/api/wishes', (req, res) => {
     });
   }
 
-  const wishes = readData(WISHES_FILE);
+  if (isGoogleScriptActive()) {
+    try {
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action: 'wish', name, message })
+      });
+      const result = await response.json();
+      if (result.success) {
+        console.log(`[WISH-Sheets] New greeting from: "${name}"`);
+        return res.json({
+          success: true,
+          message: 'Thank you for your warm wishes!'
+        });
+      }
+    } catch (err) {
+      console.error('Error posting wish to Google Sheets proxy, falling back to local file:', err);
+    }
+  }
 
+  // Fallback to local flat file database
+  const wishes = readData(WISHES_FILE);
   const newWish = {
     id: Date.now().toString(36) + Math.random().toString(36).substring(2, 7),
     name: name.trim(),
@@ -200,7 +288,7 @@ app.post('/api/wishes', (req, res) => {
     });
   }
 
-  console.log(`[WISH] New greeting from: "${newWish.name}"`);
+  console.log(`[WISH-Local] New greeting from: "${newWish.name}"`);
 
   res.json({
     success: true,

@@ -1,22 +1,9 @@
 /**
  * Champagne Luxury Wedding Invitation Engine
  * Interactive Anti-Gravity Physics Background, Splash Transition, & Comments Board
+ */
 document.addEventListener('DOMContentLoaded', () => {
   
-  // ==========================================================
-  // GOOGLE SHEETS BACKEND API URL (CORS BYPASS MODE)
-  // ==========================================================
-  // Replace this placeholder with your deployed Google Apps Script web app URL
-  // e.g. 'https://script.google.com/macros/s/AKfycbx..._your_id.../exec'
-  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxuBYAaVvxeQ0qc8QQae1Sb8ETp0_Fqvhbcm4aqXrRUjq6zTZJMfZMya5laBPTERSLt/exec';
-
-  // Default Mock Wishes (displays before user sets Google Script URL)
-  const defaultWishes = [
-    { name: "Amina & Shafi", message: "Congratulations Nowfal and Hessa! Wishing you both a lifetime of love, peace, and endless happiness together. Barakallahu lakuma!", timestamp: new Date(Date.now() - 3600000 * 2).toISOString() },
-    { name: "Dr. Farhan", message: "So happy for you Nowfal! May Allah shower His blessings upon your union and guide your footsteps in this beautiful new chapter.", timestamp: new Date(Date.now() - 3600000 * 5).toISOString() },
-    { name: "Shabnam", message: "Sending you warmest wishes and prayers on your special day. Have a wonderful celebration!", timestamp: new Date(Date.now() - 3600000 * 24).toISOString() }
-  ];
-
   // ==========================================
   // SPLASH SCREEN & ENTRY LOGIC
   // ==========================================
@@ -350,11 +337,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const guestName = document.getElementById('guestName').value.trim();
       const guestCount = document.getElementById('guestCount').value;
 
-      function handleRsvpSuccess(result, name, count) {
+      fetch('/api/rsvp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guestName, guestCount })
+      })
+      .then(response => response.json())
+      .then(result => {
         if (result.success) {
           rsvpFeedback.innerHTML = `
             <p class="feedback-head" style="font-weight: 600; color: var(--gold); margin-bottom: 0.5rem; font-size: 1.25rem;">Response Registered</p>
-            <p>Thank you, <strong>${name}</strong>. Your confirmation for <strong>${count} ${parseInt(count) === 1 ? 'guest' : 'guests'}</strong> has been saved. We are delighted to celebrate this special day with you.</p>
+            <p>Thank you, <strong>${guestName}</strong>. Your confirmation for <strong>${guestCount} ${parseInt(guestCount) === 1 ? 'guest' : 'guests'}</strong> has been saved. We are delighted to celebrate this special day with you.</p>
           `;
           rsvpFeedback.style.borderColor = 'rgba(212, 175, 55, 0.2)';
           rsvpFeedback.style.color = 'var(--text-primary)';
@@ -371,9 +364,8 @@ document.addEventListener('DOMContentLoaded', () => {
         rsvpSubmitBtn.disabled = false;
         if (btnText) btnText.textContent = "SUBMIT RESPONSE";
         rsvpFeedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-
-      function handleRsvpError(err) {
+      })
+      .catch(err => {
         console.error("RSVP API Error:", err);
         rsvpFeedback.innerHTML = `
           <p class="feedback-head" style="font-weight: 600; color: #ff4d4f; margin-bottom: 0.5rem; font-size: 1.25rem;">Network Error</p>
@@ -385,27 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rsvpSubmitBtn.disabled = false;
         if (btnText) btnText.textContent = "SUBMIT RESPONSE";
         rsvpFeedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-
-      if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_SCRIPT_URL') {
-        fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify({ action: 'rsvp', name: guestName, count: guestCount })
-        })
-        .then(response => response.json())
-        .then(result => handleRsvpSuccess(result, guestName, guestCount))
-        .catch(err => handleRsvpError(err));
-      } else {
-        // Fallback: LocalStorage
-        let localRsvps = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
-        localRsvps.push({ name: guestName, count: guestCount, timestamp: new Date().toISOString() });
-        localStorage.setItem('wedding_rsvps', JSON.stringify(localRsvps));
-        
-        setTimeout(() => {
-          handleRsvpSuccess({ success: true }, guestName, guestCount);
-        }, 800);
-      }
+      });
     });
   }
 
@@ -428,34 +400,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Fetch and display wishes (Google Sheets Web App / LocalStorage fallback)
+  // Fetch and display wishes
   function fetchWishes() {
-    if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_SCRIPT_URL') {
-      fetch(GOOGLE_SCRIPT_URL)
-        .then(res => res.json())
-        .then(result => {
-          // Google Script doGet can return the array directly or wrapped
-          if (Array.isArray(result)) {
-            renderWishes(result);
-          } else if (result.success && Array.isArray(result.data)) {
-            renderWishes(result.data);
-          } else {
-            console.error("Failed to load wishes from Google Script API.");
-          }
-        })
-        .catch(err => {
-          console.error("Wishes API Load Error:", err);
-          wishesGrid.innerHTML = `<div class="no-wishes" style="color: #ff4d4f;">Could not load greetings board.</div>`;
-        });
-    } else {
-      // LocalStorage fallback
-      let localWishes = localStorage.getItem('wedding_wishes');
-      if (!localWishes) {
-        localStorage.setItem('wedding_wishes', JSON.stringify(defaultWishes));
-        localWishes = JSON.stringify(defaultWishes);
-      }
-      renderWishes(JSON.parse(localWishes));
-    }
+    fetch('/api/wishes')
+      .then(res => res.json())
+      .then(result => {
+        if (result.success) {
+          renderWishes(result.data);
+        } else {
+          console.error("Failed to load wishes from API.");
+        }
+      })
+      .catch(err => {
+        console.error("Wishes API Load Error:", err);
+        wishesGrid.innerHTML = `<div class="no-wishes" style="color: #ff4d4f;">Could not load greetings board.</div>`;
+      });
   }
 
   function renderWishes(wishes) {
@@ -505,8 +464,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const name = document.getElementById('wishName').value.trim();
       const message = document.getElementById('wishMessage').value.trim();
 
-      function handleWishSuccess(result) {
+      fetch('/api/wishes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, message })
+      })
+      .then(res => res.json())
+      .then(result => {
         if (result.success) {
+          // Success state
           wishFormFeedback.innerHTML = `
             <p style="font-weight: 600; color: var(--gold); margin-bottom: 0.25rem;">Wish Received</p>
             <p>${result.message || 'Thank you for your blessings!'}</p>
@@ -516,8 +482,10 @@ document.addEventListener('DOMContentLoaded', () => {
           wishFormFeedback.classList.remove('hidden');
           
           wishForm.reset();
+          // Reload the wishes grid immediately to show the new card
           fetchWishes();
         } else {
+          // Validation/server error state
           wishFormFeedback.innerHTML = `
             <p style="font-weight: 600; color: #ff4d4f; margin-bottom: 0.25rem;">Error</p>
             <p>${result.message || 'Failed to submit wish. Please try again.'}</p>
@@ -529,9 +497,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         wishSubmitBtn.disabled = false;
         if (btnText) btnText.textContent = "SEND BLESSINGS";
-      }
-
-      function handleWishError(err) {
+      })
+      .catch(err => {
         console.error("Wishes Form API Error:", err);
         wishFormFeedback.innerHTML = `
           <p style="font-weight: 600; color: #ff4d4f; margin-bottom: 0.25rem;">Network Error</p>
@@ -543,27 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         wishSubmitBtn.disabled = false;
         if (btnText) btnText.textContent = "SEND BLESSINGS";
-      }
-
-      if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_SCRIPT_URL') {
-        fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify({ action: 'wish', name, message })
-        })
-        .then(res => res.json())
-        .then(result => handleWishSuccess(result))
-        .catch(err => handleWishError(err));
-      } else {
-        // Fallback: LocalStorage
-        let localWishes = JSON.parse(localStorage.getItem('wedding_wishes') || JSON.stringify(defaultWishes));
-        localWishes.unshift({ name, message, timestamp: new Date().toISOString() });
-        localStorage.setItem('wedding_wishes', JSON.stringify(localWishes));
-        
-        setTimeout(() => {
-          handleWishSuccess({ success: true, message: 'Thank you for your blessings!' });
-        }, 600);
-      }
+      });
     });
   }
 
