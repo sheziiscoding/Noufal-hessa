@@ -1,8 +1,6 @@
 /**
  * Champagne Luxury Wedding Invitation Engine
  * Interactive Anti-Gravity Physics Background, Splash Transition, & Comments Board
- */
-
 document.addEventListener('DOMContentLoaded', () => {
   
   // ==========================================================
@@ -10,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================
   // Replace this placeholder with your deployed Google Apps Script web app URL
   // e.g. 'https://script.google.com/macros/s/AKfycbx..._your_id.../exec'
-  const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL';
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxuBYAaVvxeQ0qc8QQae1Sb8ETp0_Fqvhbcm4aqXrRUjq6zTZJMfZMya5laBPTERSLt/exec';
 
   // Default Mock Wishes (displays before user sets Google Script URL)
   const defaultWishes = [
