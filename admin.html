@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Wedding RSVP Panel</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-main: #FAF9F6;
+      --bg-card: #FFFFFF;
+      --text-primary: #2C2520;
+      --text-muted: #7A7265;
+      --gold: #D4AF37;
+      --gold-light: rgba(212, 175, 55, 0.08);
+      --gold-border: rgba(212, 175, 55, 0.3);
+      --font-serif: 'Cormorant Garamond', serif;
+      --font-sans: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      padding: 2rem;
+    }
+
+    .admin-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid var(--gold-border);
+      padding-bottom: 2rem;
+    }
+
+    header h1 {
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      padding: 2.5rem;
+      border-radius: 4px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(44, 37, 32, 0.02);
+      position: relative;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      border: 1px solid rgba(212, 175, 55, 0.05);
+      pointer-events: none;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .stat-number {
+      font-family: var(--font-serif);
+      font-size: 3.5rem;
+      color: var(--text-primary);
+      font-weight: 400;
+    }
+
+    /* Table Section */
+    .table-section {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 4px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(44, 37, 32, 0.02);
+      margin-bottom: 2rem;
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .table-title {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      font-weight: 400;
+    }
+
+    .export-btn {
+      background: transparent;
+      border: 1px solid var(--gold);
+      padding: 0.75rem 1.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--text-primary);
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .export-btn:hover {
+      background: var(--text-primary);
+      color: #FFFFFF;
+      border-color: var(--text-primary);
+    }
+
+    /* Table Styling */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid rgba(122, 114, 101, 0.1);
+    }
+
+    th {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    td {
+      color: var(--text-primary);
+    }
+
+    .guest-name-cell {
+      font-weight: 500;
+    }
+
+    .guest-count-badge {
+      background: var(--gold-light);
+      border: 1px solid var(--gold-border);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+      font-style: italic;
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+    }
+
+    /* Back Button */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+      margin-top: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: var(--gold);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+      header h1 {
+        font-size: 2.25rem;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .table-section {
+        padding: 1.5rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-container">
+    
+    <header>
+      <h1>RSVP Administration</h1>
+      <p>Dr. Nowfal & Dr. Hessa — Wedding Reception Panel</p>
+    </header>
+
+    <!-- Stats Summary -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">Total Groups Registered</span>
+        <div id="statGroups" class="stat-number">0</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Total Expected Guests</span>
+        <div id="statGuests" class="stat-number">0</div>
+      </div>
+    </div>
+
+    <!-- Guest Table Section -->
+    <div class="table-section">
+      <div class="table-header">
+        <h2 class="table-title">Registered Guest List</h2>
+        <button id="exportCsvBtn" class="export-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          <span>DOWNLOAD CSV</span>
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table id="guestTable">
+          <thead>
+            <tr>
+              <th style="width: 80px;">#</th>
+              <th>Guest Name</th>
+              <th style="width: 150px;">Attendees</th>
+              <th>Registration Time</th>
+            </tr>
+          </thead>
+          <tbody id="guestTableBody">
+            <!-- Data will be populated by JS -->
+            <tr>
+              <td colspan="4" class="no-data">Loading guest records...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a href="/" class="back-link">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      <span>BACK TO INVITATION</span>
+    </a>
+
+  </div>
+
+  <script>
+    let rsvpData = [];
+
+    // Format ISO Date to readable format
+    function formatDate(isoString) {
+      if (!isoString) return '-';
+      const date = new Date(isoString);
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      }) + ' · ' + date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+    }
+
+    // Fetch and populate table
+    async function loadRSVPs() {
+      try {
+        const response = await fetch('/api/rsvp');
+        const result = await response.json();
+        
+        if (result.success) {
+          rsvpData = result.data || [];
+          populateStats(result.totalGroups, result.totalGuests);
+          populateTable(rsvpData);
+        } else {
+          showError("Failed to retrieve guest data.");
+        }
+      } catch (err) {
+        console.error(err);
+        showError("An error occurred while loading RSVPs.");
+      }
+    }
+
+    function populateStats(groups, totalGuests) {
+      document.getElementById('statGroups').textContent = groups;
+      document.getElementById('statGuests').textContent = totalGuests;
+    }
+
+    function populateTable(data) {
+      const tbody = document.getElementById('guestTableBody');
+      tbody.innerHTML = '';
+
+      if (data.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="no-data">No guest RSVP responses received yet.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      data.forEach((guest, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td class="guest-name-cell">${escapeHtml(guest.name)}</td>
+          <td><span class="guest-count-badge">${guest.count} ${parseInt(guest.count) === 1 ? 'Guest' : 'Guests'}</span></td>
+          <td>${formatDate(guest.timestamp)}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function showError(message) {
+      const tbody = document.getElementById('guestTableBody');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" class="no-data" style="color: #ff4d4f;">${message}</td>
+        </tr>
+      `;
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Dynamic CSV compilation and download
+    document.getElementById('exportCsvBtn').addEventListener('click', () => {
+      if (rsvpData.length === 0) {
+        alert("No guest data available to export.");
+        return;
+      }
+
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "Index,Guest Name,Number of Attendees,Registration Time\r\n";
+
+      rsvpData.forEach((guest, index) => {
+        // Wrap names in quotes to handle potential commas safely
+        const escapedName = `"${guest.name.replace(/"/g, '""')}"`;
+        const time = new Date(guest.timestamp).toLocaleString();
+        csvContent += `${index + 1},${escapedName},${guest.count},"${time}"\r\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "wedding_rsvp_guest_list.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    // Run on startup
+    window.addEventListener('load', loadRSVPs);
+  </script>
+</body>
+</html>

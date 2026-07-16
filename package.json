@@ -1,0 +1,14 @@
+{
+  "name": "wedding-invitation-backend",
+  "version": "1.0.0",
+  "description": "Premium Champagne Luxury wedding invitation and RSVP Node.js API server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "author": "Antigravity AI",
+  "license": "ISC"
+}

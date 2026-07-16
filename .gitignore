@@ -1,0 +1,14 @@
+# Dependency directories
+node_modules/
+
+# Local database files (optional - ignore if you want to keep data local only)
+# rsvps.json
+# wishes.json
+
+# Log files
+*.log
+npm-debug.log*
+
+# OS metadata
+.DS_Store
+Thumbs.db

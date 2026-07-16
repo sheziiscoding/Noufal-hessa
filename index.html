@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Reception — Dr. Nowfal & Dr. Hessa</title>
+  
+  <!-- SEO & Meta Tags -->
+  <meta name="description" content="You are cordially invited to the wedding reception of Dr. Nowfal Yousaf and Dr. Hessa Fathima on Sunday, 23rd August 2026. Join us in celebrating our love.">
+  <meta property="og:title" content="Wedding Reception — Dr. Nowfal & Dr. Hessa">
+  <meta property="og:description" content="Join us in celebrating the wedding reception of Dr. Nowfal Yousaf and Dr. Hessa Fathima on Sunday, 23rd August 2026.">
+  <meta property="og:type" content="website">
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- GSAP Animation Library CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body>
+
+  <!-- Anti-Gravity Canvas Background -->
+  <canvas id="antiGravityCanvas"></canvas>
+
+  <!-- Opening Splash Screen -->
+  <div id="splashScreen" class="splash-screen">
+    <div class="splash-content">
+      <span class="splash-subtitle">YOU ARE CORDIALLY INVITED TO THE CELEBRATION OF</span>
+      <h1 class="splash-names">
+        <span class="name-line">Nowfal</span>
+        <span class="splash-amp">&amp;</span>
+        <span class="name-line">Hessa</span>
+      </h1>
+      <div class="gold-divider"></div>
+      <p class="splash-date">23 . 08 . 2026</p>
+      <button id="enterBtn" class="enter-btn">
+        <span>OPEN INVITATION</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2v20M17 5l-5-3-5 3M17 19l-5 3-5-3"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Audio Player Elements -->
+  <audio id="bgMusic" loop src="audio/background.mp3"></audio>
+  <button id="musicToggleBtn" aria-label="Toggle Background Music" class="music-btn hidden">
+    <span class="music-icon-wrapper">
+      <svg class="icon-play" viewBox="0 0 24 24" width="20" height="20">
+        <path fill="currentColor" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6zm-2 16c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+      </svg>
+      <svg class="icon-pause hidden" viewBox="0 0 24 24" width="20" height="20">
+        <path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+      </svg>
+    </span>
+    <span class="music-text">PLAY MUSIC</span>
+  </button>
+
+  <!-- Main Container (Hidden or pushed down initially, shown after entry transition) -->
+  <main class="content-wrapper blurred" id="mainContent">
+
+    <!-- SECTION 1: HERO -->
+    <section id="hero" class="section hero-section">
+      <div class="hero-content">
+        <span class="hero-greeting">THE WEDDING CELEBRATION OF</span>
+        <h1 class="hero-title">
+          <span class="groom-name">Nowfal</span>
+          <span class="ampersand">&amp;</span>
+          <span class="bride-name">Hessa</span>
+        </h1>
+        <div class="gold-divider"></div>
+        <p class="hero-subtitle">WEDDING RECEPTION</p>
+        <p class="hero-date">23 . 08 . 2026</p>
+        
+        <!-- Countdown Timer -->
+        <div class="countdown-container" id="countdown">
+          <div class="countdown-item">
+            <span class="countdown-number" id="cdDays">00</span>
+            <span class="countdown-label">Days</span>
+          </div>
+          <div class="countdown-divider">:</div>
+          <div class="countdown-item">
+            <span class="countdown-number" id="cdHours">00</span>
+            <span class="countdown-label">Hours</span>
+          </div>
+          <div class="countdown-divider">:</div>
+          <div class="countdown-item">
+            <span class="countdown-number" id="cdMinutes">00</span>
+            <span class="countdown-label">Mins</span>
+          </div>
+          <div class="countdown-divider">:</div>
+          <div class="countdown-item">
+            <span class="countdown-number" id="cdSeconds">00</span>
+            <span class="countdown-label">Secs</span>
+          </div>
+        </div>
+      </div>
+      <!-- Scroll Indicator -->
+      <div class="scroll-indicator" id="scrollIndicator">
+        <span class="scroll-text">SCROLL TO ENTER</span>
+        <div class="scroll-arrow">
+          <svg viewBox="0 0 24 24" width="20" height="20">
+            <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: INVITATION CONTEXT -->
+    <section id="invitation-context" class="section card-section">
+      <div class="editorial-card fade-in">
+        <div class="card-header">
+          <span class="bismillah">In the name of Allah, the Most Gracious, the Most Merciful</span>
+          <div class="gold-accent-mark"></div>
+        </div>
+        <p class="blessing-message">
+          With the grace of the Almighty, we joyfully invite you and your family to share in the blessings and happiness of the wedding reception of our children
+        </p>
+        
+        <div class="couple-details">
+          <div class="couple-member">
+            <h2 class="member-name">Dr. Nowfal Yousaf</h2>
+            <span class="member-title">Groom</span>
+          </div>
+          <div class="couple-connector">
+            <span class="connector-and">and</span>
+          </div>
+          <div class="couple-member">
+            <h2 class="member-name">Dr. Hessa Fathima</h2>
+            <span class="member-title">Bride</span>
+          </div>
+        </div>
+
+        <p class="invitation-request">
+          Your esteemed presence is requestfully solicited to grace this auspicious occasion and bless the couple as they begin their beautiful journey together.
+        </p>
+
+        <div class="event-time-structure">
+          <div class="time-block">
+            <span class="time-label">DATE</span>
+            <span class="time-value">SUNDAY · 23 AUGUST 2026</span>
+          </div>
+          <div class="vertical-separator"></div>
+          <div class="time-block">
+            <span class="time-label">TIME</span>
+            <span class="time-value">4:30 PM to 8:00 PM</span>
+          </div>
+        </div>
+
+        <!-- Add to Calendar Action -->
+        <div class="calendar-actions">
+          <button id="addToCalendarBtn" class="calendar-btn-link" aria-haspopup="true" aria-expanded="false">
+            <svg class="calendar-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>ADD TO CALENDAR</span>
+          </button>
+          <div id="calendarDropdown" class="calendar-dropdown-list hidden">
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Wedding+Reception:+Nowfal+%26+Hessa&dates=20260823T110000Z/20260823T143000Z&details=You+are+cordially+invited+to+the+wedding+reception+of+Dr.+Nowfal+Yousaf+and+Dr.+Hessa+Fathima+at+Hailmount+Auditorium,+Chelakkara.&location=Hailmount+Auditorium,+Chelakkara,+Thrissur,+Kerala" target="_blank" rel="noopener noreferrer" class="dropdown-link-item">Google Calendar</a>
+            <button id="downloadIcsBtn" class="dropdown-link-item">iCal / Outlook (.ics)</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: THE VENUE -->
+    <section id="venue" class="section card-section">
+      <div class="editorial-card fade-in">
+        <span class="section-label">THE VENUE</span>
+        <h2 class="venue-title">Hailmount Auditorium</h2>
+        <p class="venue-address">Chelakkara, Thrissur, Kerala</p>
+        
+        <div class="venue-divider"></div>
+        
+        <p class="venue-note">
+          Join us at our beautiful venue. Click below to view interactive driving directions and map coordinates.
+        </p>
+
+        <a href="https://maps.app.goo.gl/bQKbQuQt4gSo5d9t5?g_st=iw" target="_blank" rel="noopener noreferrer" class="maps-button" id="mapsBtn">
+          <span>VIEW LOCATION ON MAP</span>
+          <svg class="maps-icon" viewBox="0 0 24 24" width="18" height="18">
+            <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- SECTION 4: PRE-WEDDING HIGHLIGHTS GALLERY (HORIZONTAL SCROLL) -->
+    <section id="gallery" class="section gallery-section">
+      <h2 class="gallery-section-title">THE LOOK OF LOVE</h2>
+      <span class="section-label">Pre-Wedding Highlights</span>
+      
+      <div class="gallery-scroll-container fade-in">
+        <div class="gallery-scroll-track">
+          <!-- Photo 1 -->
+          <div class="gallery-scroll-item">
+            <img src="images/pic1.jpg" alt="Pre-Wedding Highlights 1" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80';">
+          </div>
+          <!-- Photo 2 (Umrah Image Highlighted) -->
+          <div class="gallery-scroll-item item-highlighted">
+            <img src="images/pic2.jpg" alt="Umrah Highlights" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80';">
+          </div>
+          <!-- Photo 3 -->
+          <div class="gallery-scroll-item">
+            <img src="images/pic3.jpg" alt="Pre-Wedding Highlights 3" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507504038482-76210374c270?auto=format&fit=crop&w=800&q=80';">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: FAMILY TREE GRID -->
+    <section id="family" class="section family-section">
+      <h2 class="family-section-title">THE FAMILIES</h2>
+      <div class="family-grid">
+        
+        <!-- GROOM'S SIDE -->
+        <div class="family-column groom-side fade-in">
+          <div class="family-card">
+            <span class="family-side-label">Groom's Family</span>
+            <h3 class="house-name highlighted-house">Parakkalam House</h3>
+            <span class="house-loc">Chelakkara</span>
+            
+            <div class="family-members-list">
+              <div class="family-tier">
+                <span class="tier-label">Parents</span>
+                <p class="member-item groom-father">Late Abdul Rasheed Parakkalam</p>
+                <p class="member-item">Sabira Rasheed</p>
+              </div>
+
+              <div class="family-tier">
+                <span class="tier-label">Siblings</span>
+                <p class="member-item sibling-list">Aysha, Shanuka, Firozka, Mohammed, Afi, Murshida</p>
+              </div>
+
+              <div class="family-tier">
+                <span class="tier-label">Little Ones</span>
+                <p class="member-item children-list">Thachu, Farha, Munnu, Faiza, Zara, Ahmed, Huzain, Zaidu, Kadheeja</p>
+              </div>
+
+              <div class="family-tier">
+                <span class="tier-label">Grandparents</span>
+                <ul class="grandparent-list">
+                  <li>Late Yousuf Parakkalam</li>
+                  <li>Late Nabeesumma</li>
+                  <li>Late Saidu Muhammed <span class="gp-subtext">(Ansar Manzil)</span></li>
+                  <li>Late Fathima Beevi</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BRIDE'S SIDE -->
+        <div class="family-column bride-side fade-in">
+          <div class="family-card">
+            <span class="family-side-label">Bride's Family</span>
+            <h3 class="house-name highlighted-house">Pokkakkilath House</h3>
+            <span class="house-loc">Kuttamangalam, Thrissur</span>
+            
+            <div class="family-members-list">
+              <div class="family-tier">
+                <span class="tier-label">Parents</span>
+                <p class="member-item">Sharafuddeen</p>
+                <p class="member-item">Hazeena</p>
+              </div>
+
+              <div class="family-tier">
+                <span class="tier-label">Siblings</span>
+                <p class="member-item sibling-list">Dr. Hala Thasneem, Dr. Hamza, Dr. Mohammad Hyzoom, Dr. Sheima Hyzoom</p>
+              </div>
+
+              <div class="family-tier">
+                <span class="tier-label">Little Ones</span>
+                <p class="member-item children-list">Hazam Ahmad, Haam Muhammed, Yusra</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 6: RSVP FORM -->
+    <section id="rsvp" class="section rsvp-section">
+      <div class="editorial-card fade-in">
+        <span class="section-label">RSVP</span>
+        <h2 class="rsvp-title">Kindly Respond</h2>
+        <p class="rsvp-subtitle">Please let us know if you will be attending our celebration.</p>
+        
+        <form id="rsvpForm" class="rsvp-form">
+          <div class="form-group">
+            <label for="guestName" class="form-label">Full Name</label>
+            <input type="text" id="guestName" name="guestName" class="form-input" placeholder="Your Name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="guestCount" class="form-label">Number of Guests</label>
+            <div class="select-wrapper">
+              <select id="guestCount" name="guestCount" class="form-select" required>
+                <option value="" disabled selected>Select count</option>
+                <option value="1">1 Person</option>
+                <option value="2">2 People</option>
+                <option value="3">3 People</option>
+                <option value="4">4 People</option>
+                <option value="5+">5+ People</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-button" id="rsvpSubmitBtn">
+            <span>SUBMIT RESPONSE</span>
+          </button>
+        </form>
+
+        <div id="rsvpFeedback" class="rsvp-feedback hidden"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: GUEST WISHES & COMMENTS -->
+    <section id="wishes" class="section wishes-section">
+      <div class="editorial-card wishes-card fade-in">
+        <span class="section-label">GUESTBOOK</span>
+        <h2 class="wishes-title">Wishes &amp; Blessings</h2>
+        <p class="wishes-subtitle">Leave a congratulatory message or prayer for the happy couple.</p>
+        
+        <form id="wishForm" class="wish-form">
+          <div class="form-group">
+            <label for="wishName" class="form-label">Your Name</label>
+            <input type="text" id="wishName" name="wishName" class="form-input" placeholder="Your Name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="wishMessage" class="form-label">Congratulatory Wish</label>
+            <textarea id="wishMessage" name="wishMessage" class="form-textarea" placeholder="May your lives be filled with love and laughter..." rows="3" required></textarea>
+          </div>
+
+          <button type="submit" class="submit-button" id="wishSubmitBtn">
+            <span>SEND BLESSINGS</span>
+          </button>
+        </form>
+
+        <div id="wishFormFeedback" class="rsvp-feedback hidden"></div>
+      </div>
+
+      <!-- Scrollable Wishes Board -->
+      <div class="wishes-board fade-in">
+        <h3 class="wishes-board-title">WISHES &amp; GREETINGS</h3>
+        <div class="gold-board-divider"></div>
+        <div id="wishesGrid" class="wishes-grid">
+          <!-- Populated dynamically via JS -->
+          <div class="no-wishes">Retrieving warm wishes...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="invitation-footer">
+      <p class="footer-blessing">May your prayers accompany us.</p>
+      <p class="footer-design">#NowfalAndHessa2026</p>
+    </footer>
+
+  </main>
+
+  <!-- Main JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>
