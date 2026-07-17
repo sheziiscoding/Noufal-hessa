@@ -308,3 +308,5 @@ app.listen(PORT, () => {
   console.log(`Admin Portal: http://localhost:${PORT}/admin`);
   console.log(`==========================================`);
 });
+
+module.exports = app;
