@@ -589,7 +589,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "DTSTART:20260823T110000Z", // 11:00 AM UTC (4:30 PM IST)
         "DTEND:20260823T143000Z",   // 2:30 PM UTC (8:00 PM IST)
         "SUMMARY:Wedding Reception — Dr. Nowfal & Dr. Hessa Fathima",
-        "DESCRIPTION:You are cordially invited to the wedding reception of Dr. Nowfal Yousaf and Dr. Hessa Fathima.",
+        "DESCRIPTION:You are cordially invited to the wedding reception of Dr. Nowfal Yousuf and Dr. Hessa Fathima.",
         "LOCATION:Hailmount Auditorium, Chelakkara, Thrissur, Kerala",
         "END:VEVENT",
         "END:VCALENDAR"
