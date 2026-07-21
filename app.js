@@ -2,8 +2,9 @@
  * Champagne Luxury Wedding Invitation Engine
  * Interactive Anti-Gravity Physics Background, Splash Transition, & Comments Board
  */
+
 document.addEventListener('DOMContentLoaded', () => {
-  
+
   // ==========================================
   // SPLASH SCREEN & ENTRY LOGIC
   // ==========================================
@@ -581,14 +582,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const icsLines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
-        "PRODID:-//Wedding Reception//Nowfal and Hessa//EN",
+        "PRODID:-//Wedding Reception//Noufal and Hessa//EN",
         "BEGIN:VEVENT",
-        "UID:wedding-reception-nowfal-hessa-2026@sisterswedding.com",
+        "UID:wedding-reception-noufal-hessa-2026@sisterswedding.com",
         "DTSTAMP:20260716T000000Z",
         "DTSTART:20260823T110000Z", // 11:00 AM UTC (4:30 PM IST)
         "DTEND:20260823T143000Z",   // 2:30 PM UTC (8:00 PM IST)
-        "SUMMARY:Wedding Reception — Dr. Nowfal & Dr. Hessa",
-        "DESCRIPTION:You are cordially invited to the wedding reception of Dr. Nowfal Yousaf and Dr. Hessa Fathima.",
+        "SUMMARY:Wedding Reception — Dr. Noufal & Dr. Hessa Fathima",
+        "DESCRIPTION:You are cordially invited to the wedding reception of Dr. Noufal Yousaf and Dr. Hessa Fathima.",
         "LOCATION:Hailmount Auditorium, Chelakkara, Thrissur, Kerala",
         "END:VEVENT",
         "END:VCALENDAR"
@@ -597,7 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const blob = new Blob([icsLines.join("\r\n")], { type: 'text/calendar;charset=utf-8' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = "wedding_reception_nowfal_hessa.ics";
+      link.download = "wedding_reception_noufal_hessa.ics";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

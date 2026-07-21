@@ -8,7 +8,7 @@ const DB_FILE = path.join(__dirname, 'rsvps.json');
 const WISHES_FILE = path.join(__dirname, 'wishes.json');
 
 // Google Sheets proxy configurations (set via process.env.GOOGLE_SCRIPT_URL)
-const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL || '';
+const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbw9hHuHPJZMCUMniC0XFCVt1g3xfCL37kbpxoHdyX8Bsagy6YWkTX4oyMIR-Gt5gNN05w/exec';
 
 const isGoogleScriptActive = () => {
   return GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_SCRIPT_URL';
